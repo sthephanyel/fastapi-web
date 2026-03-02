@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from './providers/theme-provider';
 import './App.css'
 import './css/styles.css'
+// import './css/global.css'
 
 import { AppRouting } from './routing/app-routing'
 
