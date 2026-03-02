@@ -3,7 +3,9 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from './providers/theme-provider';
 import './App.css'
+import './css/styles.css'
 
 import { AppRouting } from './routing/app-routing'
 
@@ -32,9 +34,11 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p> */}
-      <BrowserRouter>
-        <AppRouting/>
-      </BrowserRouter>
+      <ThemeProvider>
+        <BrowserRouter>
+          <AppRouting/>
+        </BrowserRouter>
+      </ThemeProvider>
     </>
   )
 }
