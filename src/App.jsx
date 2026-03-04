@@ -4,23 +4,27 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from './providers/theme-provider';
-import './App.css'
+import { QueryProvider } from './providers/query-provider';
+import { TooltipsProvider } from './providers/tooltips-provider';
+import { Toaster } from '@/components/ui/sonner';
+// import './App.css'
 import './css/styles.css'
 // import './css/global.css'
 
 import { AppRouting } from './routing/app-routing'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
+    <QueryProvider>
       <ThemeProvider>
-        <BrowserRouter>
-          <AppRouting/>
-        </BrowserRouter>
+        <TooltipsProvider>
+          <BrowserRouter>
+            <Toaster />
+            <AppRouting/>
+          </BrowserRouter>
+        </TooltipsProvider>
       </ThemeProvider>
-    </>
+    </QueryProvider>
   )
 }
 
