@@ -58,7 +58,6 @@ export default function LoginPage(){
     });
 
     const onSubmit = async (data: LoginFormData) => {
-        console.log('LoginFormData', data)
         setLoading(true);
         try {
             await loginAccess.mutateAsync({
@@ -72,7 +71,6 @@ export default function LoginPage(){
         const axiosError = error as {
             response?: { data?: { message?: string } };
         };
-        console.log('axiosError', error)
         const errorMessage = axiosError?.response?.data?.message || "Erro ao realizar login. 2";
             toast.error(errorMessage);
         } finally {
@@ -81,8 +79,8 @@ export default function LoginPage(){
     };
 
     return (
-        <div className="flex w-screen min-h-screen bg-amber-400">
-            <div className='flex w-full bg-red-200'></div>
+        <div className="flex w-screen min-h-screen bg-amber-400 max-md:flex-col max-md:justify-center max-md:items-center">
+            <div className='flex w-full bg-red-200'>...</div>
             <div className='flex w-full justify-center items-center bg-blue-200'>
                 <Card className='flex w-5/6 p-10'>
                     <CardHeader className="flex pb-8 justify-between mb-3">

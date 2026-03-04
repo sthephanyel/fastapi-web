@@ -27,7 +27,6 @@ export async function fetchLogin(data: fetchLoginParams): Promise<LoginResponse>
     formData.append("username", username || "");
 
     const { data: response } = await api.post<LoginResponse>("/login", formData);
-    console.log('response check', response)
     if (!response.access_token) {
       throw {
         response: {
@@ -41,7 +40,6 @@ export async function fetchLogin(data: fetchLoginParams): Promise<LoginResponse>
       response.access_token,
       response.refresh_token
     );
-    console.log('response', response)
     return {
       'access_token': response.access_token,
       'refresh_token': response.refresh_token,
