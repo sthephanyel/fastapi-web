@@ -26,12 +26,20 @@ export async function fetchLogin(data: fetchLoginParams): Promise<LoginResponse>
     formData.append("password", password || "");
     formData.append("username", username || "");
 
-    const { data: response } = await api.post<LoginResponse>("/login", formData);
-    if (!response.access_token) {
+    const { data: response, status } = await api.post<LoginResponse>("/login", formData);
+    
+    console.log('status', status)
+    console.log('response', response)
+    
+    if ( status != 200
+        && !response.access_token
+        && !response.refresh_token
+        && !response.token_type
+      ) {
       throw {
         response: {
           data: {
-            message: "Erro ao fazer login. AQUI...",
+            detail: "Erro ao fazer login.",
           },
         },
       };

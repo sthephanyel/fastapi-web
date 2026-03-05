@@ -1,15 +1,15 @@
 import { ErrorRouting } from '@/errors/error-routing';
 import AuthLayout from '@/layouts/auth-layout';
-import LoginPage from '@/pages/login/login';
+import Home from '@/pages/home/home';
 import { Navigate, Route, Routes } from 'react-router';
 
-export function AppRoutingSetup() {
+export function AppRoutingAuthentication() {
   return (
     <Routes>
-      <Route index element={<LoginPage />} />
-      {/* <Route element={<AuthLayout />}>
-        <Route path="/login" element={<LoginPage />} />
-      </Route> */}
+      <Route element={<AuthLayout />}>
+        <Route index element={<Home />} />
+        {/* <Route path="/login" element={<LoginPage />} /> */}
+      </Route>
       <Route path="error/*" element={<ErrorRouting />} />
     </Routes>
   );

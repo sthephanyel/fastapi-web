@@ -25,6 +25,7 @@ import { cn } from '@/lib/utils';
 import { useLogin } from '@/services/login/hooks';
 import { toast } from "sonner";
 import { useAuthStore } from '@/store/auth';
+import { Skeleton } from "@/components/ui/skeleton"
 
 const schema = z.object({
     username: z.string().min(3, { message: "Required" }),
@@ -39,10 +40,10 @@ export default function LoginPage(){
     const loginAccess = useLogin();
     // const [isPending, startTransition] = useTransition();
     const [loading, setLoading] = useState(false);
-    const { token, refreshToken } = useAuthStore();
+    // const { token, refreshToken } = useAuthStore();
 
-    console.log('token', token);
-    console.log('refreshToken', refreshToken);
+    // console.log('token', token);
+    // console.log('refreshToken', refreshToken);
 
     const handleThemeToggle = (checked: boolean) => {
         setTheme(checked ? "dark" : "light");
@@ -69,9 +70,9 @@ export default function LoginPage(){
             setLoading(false);
         } catch (error: unknown) {
         const axiosError = error as {
-            response?: { data?: { message?: string } };
+            response?: { data?: { detail?: string } };
         };
-        const errorMessage = axiosError?.response?.data?.message || "Erro ao realizar login. 2";
+        const errorMessage = axiosError?.response?.data?.detail || "Erro ao realizar login.";
             toast.error(errorMessage);
         } finally {
             setLoading(false);
@@ -107,116 +108,102 @@ export default function LoginPage(){
                             </div>
                         </div>
                     </CardHeader>
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                            <FormField
-                                control={form.control}
-                                name="username"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>
-                                            Username
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input
-                                            placeholder=""
-                                            {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="email"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>
-                                            E-mail
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input
-                                            placeholder=""
-                                            {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="password"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>
-                                            Password
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type="password" 
-                                                placeholder=""
-                                            {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <div className='flex w-full justify-center items-center'>
-                                <Button 
-                                    type="submit"
-                                    // mode='default'
-                                    variant="login"
-                                    // className="!bg-background"
-                                    disabled={loading}
-                                >Salvar</Button>
-                            </div>
-                        </form>
-                    </Form>
-                </Card>
-                {/* <Card>
-                    <CardHeader className="flex-col items-start gap-2.5 border-b border-border p-4 sm:p-5">
-                        <div className="relative w-14 h-7">
-                            <Switch
-                                checked={theme === "dark"}
-                                onCheckedChange={handleThemeToggle}
-                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                            />
-                            <div className="absolute inset-0 rounded-full bg-secondary"></div>
-                            <div
-                            className={`absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center transform transition-transform ${
-                                theme === "dark" ? "translate-x-7" : "translate-x-0"
-                            }`}
-                            >
-                            {theme === "dark" ? (
-                                <MoonIcon className="w-4 h-4 text-gray-700" />
-                            ) : (
-                                <SunIcon className="w-4 h-4 text-yellow-500" />
-                            )}
+                    {
+                        loading ? 
+                        (<>
+                        <div className="mx-auto w-full max-w-xs">
+                            {/* Skeleton pattern */}
+                            <div className="flex flex-col gap-6">
+                                <div className="flex flex-col gap-2">
+                                    <Skeleton className="h-4 w-20" />
+                                    <Skeleton className="h-10 w-full" />
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                    <Skeleton className="h-4 w-24" />
+                                    <Skeleton className="h-10 w-full" />
+                                </div>
+                                 <div className="flex flex-col gap-2">
+                                    <Skeleton className="h-4 w-24" />
+                                    <Skeleton className="h-10 w-full" />
+                                </div>
+                                <Skeleton className="h-10 w-full" />
                             </div>
                         </div>
-                    </CardHeader>
-                    <CardTable>
-                        <Field className="max-w-xs">
-                            <FieldLabel htmlFor="input-demo-username">Username</FieldLabel>
-                            <Input
-                                id="input-demo-username"
-                                type="text"
-                                // placeholder="Enter your username"
-                            />
-                        </Field>
-                        <Field className="max-w-xs">
-                            <FieldLabel htmlFor="input-demo-password">Password</FieldLabel>
-                            <Input 
-                                id="input-demo-password" 
-                                type="password" 
-                                // placeholder="Password" 
-                            />
-                        </Field>
-                    </CardTable>
-                </Card> */}
+                        </>)
+                        : 
+                        (<>
+                            <Form {...form}>
+                                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                                    <FormField
+                                        control={form.control}
+                                        name="username"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>
+                                                    Username
+                                                </FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                    placeholder=""
+                                                    {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="email"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>
+                                                    E-mail
+                                                </FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                    placeholder=""
+                                                    {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="password"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>
+                                                    Password
+                                                </FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        type="password" 
+                                                        placeholder=""
+                                                    {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <div className='flex w-full justify-center items-center'>
+                                        <Button 
+                                            type="submit"
+                                            // mode='default'
+                                            variant="login"
+                                            // className="!bg-background"
+                                            disabled={loading}
+                                        >Salvar</Button>
+                                    </div>
+                                </form>
+                            </Form>
+                        </>)
+                    }
+                    
+                </Card>
             </div>
         </div>
     );
