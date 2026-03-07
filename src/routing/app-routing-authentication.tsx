@@ -6,10 +6,10 @@ import { Navigate, Route, Routes } from 'react-router';
 export function AppRoutingAuthentication() {
   return (
     <Routes>
-      <Route element={<AuthLayout />}>
+      <Route index element={<Home />} />
+      {/* <Route element={<AuthLayout />}>
         <Route index element={<Home />} />
-        {/* <Route path="/login" element={<LoginPage />} /> */}
-      </Route>
+      </Route> */}
       <Route path="error/*" element={<ErrorRouting />} />
     </Routes>
   );

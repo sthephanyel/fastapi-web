@@ -5,13 +5,16 @@
  * Synchronized with localStorage via helpers
  */
 
+import { fetchUserReponse } from '@/services/user/types';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 interface AuthState {
+  user: fetchUserReponse | null;
   token: string | null;
   refreshToken: string | null;
   setAuth: (token: string, refreshToken?: string) => void;
+  setUser: (data: fetchUserReponse) => void;
   clearAuth: () => void;
   logout: () => void;
 }
@@ -19,8 +22,12 @@ interface AuthState {
 export const useAuthStore = create(
   persist<AuthState>(
     (set) => ({
+      user: null,
       token: null,
       refreshToken: null,
+      setUser: (data: fetchUserReponse) => set({
+        user: data || null
+      }),
       setAuth: (token: string, refreshToken?: string) =>
         set({ token, refreshToken: refreshToken || token }),
       clearAuth: () => set({ token: null, refreshToken: null }),
