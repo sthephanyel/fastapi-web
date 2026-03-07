@@ -2,7 +2,7 @@ import { useAuthStore } from '@/store/auth';
 import { useCallback, useState } from 'react';
 
 export function useLogout() {
-  const { token, clearAuth } = useAuthStore();
+  const { token, clearAuth, clearUser } = useAuthStore();
   const [loading, setLoading] = useState(false);
 
   const logout = useCallback(async () => {
@@ -16,8 +16,9 @@ export function useLogout() {
       console.warn('useLogout: ', err);
     } finally {
       clearAuth();
+      clearUser();
     }
-  }, [token, clearAuth, loading]);
+  }, [token, clearAuth, clearUser, loading]);
 
   return { logout, loading };
 }

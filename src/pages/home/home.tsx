@@ -16,14 +16,16 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
-import { ChevronDown } from 'lucide-react';
+import { Captions, ChevronDown, ChevronUp, Clapperboard, LayoutDashboard } from 'lucide-react';
 import { UseInformationModal } from './components/UserInformationModal';
 import { useAuth } from '@/store/auth';
+import { useMediaQuery } from 'usehooks-ts';
 
 export default function Home(){
     const { user } = useAuth();
     const [userModalOpen, setUserModalOpen] = useState(false);
-
+    const smallScreen = useMediaQuery("(max-width: 768px)");
+    console.log('smallScreen', smallScreen)
     return (
         <>
             <UseInformationModal
@@ -32,31 +34,36 @@ export default function Home(){
             />
             <div className="flex w-screen h-screen justify-center p-5">
                 <div className="flex w-full max-w-full flex-col gap-6">
-                    <Tabs defaultValue="account" orientation="vertical" className="h-full gap-5">
-                        <div className='flex-col w-[20%] h-full p-2'>
-                            <Card className='flex bg-background border-0'>
+                    <Tabs 
+                        defaultValue="dashboard"
+                        orientation={!smallScreen ? "vertical" : "horizontal"} 
+                        className="md:h-full md:gap-5 max-md:flex-col"
+                    >
+                        <div className='flex-col h-full p-2 md:w-[20%]'>
+                            <Card className='flex bg-background border-0 mb-3'>
                                 <CardHeader className='flex p-0'>
                                     <Button
-                                        className='bg-background w-full border-0 rounded-none justify-between text-foreground'
+                                        className='bg-background w-full border-0 rounded-none justify-between text-foreground hover:bg-background/50'
                                         onClick={()=>setUserModalOpen(!userModalOpen)}
                                     >
                                         <div>{user?.full_name.toUpperCase() || "Usuário"}</div>
-                                        <ChevronDown/>
+                                        {userModalOpen ? <ChevronUp/> : <ChevronDown/>}
                                     </Button>
                                 </CardHeader>
                             </Card>
                             <TabsList variant="line" className="w-full shrink-0">
-                                <TabsTrigger value="account">Account</TabsTrigger>
-                                <TabsTrigger value="password">Password</TabsTrigger>
-                                <TabsTrigger value="settings">Settings</TabsTrigger>
+                                <TabsTrigger value="dashboard"><LayoutDashboard/> <span className='max-md:hidden'>Dashboard</span></TabsTrigger>
+                                <TabsTrigger value="generate_video"><Clapperboard/> <span className='max-md:hidden'>Generate Vídeo</span></TabsTrigger>
+                                <TabsTrigger value="add_caption"><Captions/> <span className='max-md:hidden'>Add Caption</span></TabsTrigger>
                             </TabsList>
                         </div>
-                        <TabsContent value="account">
+
+                        <TabsContent value="dashboard">
                             <Card>
                                 <CardHeader className="pb-3">
-                                <CardTitle className="text-base">Account</CardTitle>
+                                <CardTitle className="text-base">dashboard</CardTitle>
                                 <CardDescription className="text-sm">
-                                    Update your account information.
+                                    Update your dashboard information.
                                 </CardDescription>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
@@ -87,45 +94,45 @@ export default function Home(){
                                 </CardFooter>
                             </Card>
                         </TabsContent>
-                        <TabsContent value="password">
+                        <TabsContent value="generate_video">
                             <Card>
                                 <CardHeader className="pb-3">
-                                <CardTitle className="text-base">Password</CardTitle>
+                                <CardTitle className="text-base">generate_video</CardTitle>
                                 <CardDescription className="text-sm">
-                                    Change your password here.
+                                    Change your generate_video here.
                                 </CardDescription>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="underline-vertical-current" className="text-sm">
-                                    Current password
+                                    Current generate_video
                                     </Label>
                                     <Input
                                     id="underline-vertical-current"
-                                    type="password"
+                                    type="generate_video"
                                     className="h-9"
                                     />
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="underline-vertical-new" className="text-sm">
-                                    New password
+                                    New generate_video
                                     </Label>
                                     <Input
                                     id="underline-vertical-new"
-                                    type="password"
+                                    type="generate_video"
                                     className="h-9"
                                     />
                                 </div>
                                 </CardContent>
                                 <CardFooter className="pt-3">
-                                <Button size="sm">Update password</Button>
+                                <Button size="sm">Update generate_video</Button>
                                 </CardFooter>
                             </Card>
                         </TabsContent>
-                        <TabsContent value="settings">
+                        <TabsContent value="add_caption">
                             <Card>
                                 <CardHeader className="pb-3">
-                                <CardTitle className="text-base">Settings</CardTitle>
+                                <CardTitle className="text-base">add_caption</CardTitle>
                                 <CardDescription className="text-sm">
                                     Manage your preferences.
                                 </CardDescription>
@@ -156,7 +163,7 @@ export default function Home(){
                                 </div>
                                 </CardContent>
                                 <CardFooter className="pt-3">
-                                <Button size="sm">Save settings</Button>
+                                <Button size="sm">Save add_caption</Button>
                                 </CardFooter>
                             </Card>
                         </TabsContent>

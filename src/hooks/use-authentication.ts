@@ -2,7 +2,7 @@ import { useAuthStore } from '@/store/auth';
 import { useCallback, useMemo, useState } from 'react';
 
 export function useAuthentication() {
-  const { token, refreshToken, clearAuth } = useAuthStore();
+  const { token, refreshToken, clearAuth, clearUser } = useAuthStore();
   const [loading, setLoading] = useState(false);
 
   const isAuthentication = useMemo(
@@ -13,6 +13,7 @@ export function useAuthentication() {
       try {
         if (!token || !refreshToken) {
           clearAuth();
+          clearUser();
           return false;
         }
         return true;
@@ -25,7 +26,7 @@ export function useAuthentication() {
         // clearAuth();
       }
     },
-    [token, clearAuth]
+    [token, clearAuth, clearUser]
   );
 
   return { isAuthentication, loading };

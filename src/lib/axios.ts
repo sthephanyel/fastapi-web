@@ -46,6 +46,7 @@ api.interceptors.response.use(
 
       try {
         useAuthStore.getState().clearAuth();
+        useAuthStore.getState().clearUser();
       } finally {
         setTimeout(() => {
           isLoggingOut = false;
