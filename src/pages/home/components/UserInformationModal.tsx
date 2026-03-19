@@ -29,8 +29,6 @@ export function UseInformationModal({
 }: UseInformationModalProps){
     const { data, isLoading, isError } = getUser();
 
-    console.log('data', data)
-
     function EmptyState({ message }: { readonly message: string }) {
         return (
             <div className="text-center py-8 text-muted-foreground">{message}</div>

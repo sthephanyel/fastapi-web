@@ -9,3 +9,8 @@ export interface LoginResponse {
   refresh_token: string;
   token_type: string;
 }
+
+export interface UseRefrash {
+    access_token: string;
+    token_type: string;
+}

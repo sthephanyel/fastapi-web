@@ -20,6 +20,7 @@ import { Captions, ChevronDown, ChevronUp, Clapperboard, LayoutDashboard } from 
 import { UseInformationModal } from './components/UserInformationModal';
 import { useAuth } from '@/store/auth';
 import { useMediaQuery } from 'usehooks-ts';
+import { GenerateVideoHistoryList } from './components/GenerateVideoHistoryList';
 
 export default function Home(){
     const { user } = useAuth();
@@ -95,39 +96,7 @@ export default function Home(){
                             </Card>
                         </TabsContent>
                         <TabsContent value="generate_video">
-                            <Card>
-                                <CardHeader className="pb-3">
-                                <CardTitle className="text-base">generate_video</CardTitle>
-                                <CardDescription className="text-sm">
-                                    Change your generate_video here.
-                                </CardDescription>
-                                </CardHeader>
-                                <CardContent className="space-y-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="underline-vertical-current" className="text-sm">
-                                    Current generate_video
-                                    </Label>
-                                    <Input
-                                    id="underline-vertical-current"
-                                    type="generate_video"
-                                    className="h-9"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="underline-vertical-new" className="text-sm">
-                                    New generate_video
-                                    </Label>
-                                    <Input
-                                    id="underline-vertical-new"
-                                    type="generate_video"
-                                    className="h-9"
-                                    />
-                                </div>
-                                </CardContent>
-                                <CardFooter className="pt-3">
-                                <Button size="sm">Update generate_video</Button>
-                                </CardFooter>
-                            </Card>
+                            <GenerateVideoHistoryList/>
                         </TabsContent>
                         <TabsContent value="add_caption">
                             <Card>

@@ -1,9 +1,10 @@
 import api from "@/lib/axios";
 import type {
   LoginResponse,
+  UseRefrash,
   fetchLoginParams,
 } from "./types";
-import { useAuthStore } from "@/store/auth";
+import { useAuth, useAuthStore } from "@/store/auth";
 
 export async function fetchLogin(data: fetchLoginParams): Promise<LoginResponse> {
   try {
@@ -54,6 +55,26 @@ export async function fetchLogin(data: fetchLoginParams): Promise<LoginResponse>
       'token_type': response.token_type
     }
 
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+export async function fetchLoginRefresh(): Promise<{status: Number}>{
+  try {
+    const { refreshToken } = useAuthStore.getState();
+    const { data, status } = await api.post<UseRefrash>(`/refresh?refresh_token=${refreshToken}`);
+
+    useAuthStore.getState().setAuth(
+      data.access_token,
+      refreshToken
+    );
+
+    return {
+      'status': status
+    }
+    
   } catch (error) {
     throw error;
   }

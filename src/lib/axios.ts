@@ -1,5 +1,6 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { useAuthStore } from '@/store/auth';
+import { useRefresh } from '@/services/login/hooks';
 
 let isLoggingOut = false;
 
@@ -41,19 +42,23 @@ api.interceptors.response.use(
     const hasNotRetried = !originalRequest._retry;
 
     if ((isUnauthorized || isForbidden) && hasNotRetried) {
-      originalRequest._retry = true;
-      isLoggingOut = true;
-
-      try {
-        useAuthStore.getState().clearAuth();
-        useAuthStore.getState().clearUser();
-      } finally {
-        setTimeout(() => {
-          isLoggingOut = false;
-        }, 1000);
+      const { data: refresh_response } = useRefresh();
+      console.log('useRefresh', refresh_response)
+      if (refresh_response?.status != 200){
+        originalRequest._retry = true;
+        isLoggingOut = true;
+  
+        try {
+          useAuthStore.getState().clearAuth();
+          useAuthStore.getState().clearUser();
+        } finally {
+          setTimeout(() => {
+            isLoggingOut = false;
+          }, 1000);
+        }
+  
+        return Promise.reject(error);
       }
-
-      return Promise.reject(error);
     }
 
     return Promise.reject(error);
