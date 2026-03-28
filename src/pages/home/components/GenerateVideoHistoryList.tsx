@@ -1,36 +1,28 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { Badge } from "@/components/reui/badge"
 import {
   DataGrid,
-  DataGridContainer,
+  DataGridContainer
 } from "@/components/reui/data-grid/data-grid"
 import { DataGridColumnHeader } from "@/components/reui/data-grid/data-grid-column-header"
-import { DataGridPagination } from "@/components/reui/data-grid/data-grid-pagination"
-import { DataGridScrollArea } from "@/components/reui/data-grid/data-grid-scroll-area"
 import { DataGridTable } from "@/components/reui/data-grid/data-grid-table"
 import {
   ColumnDef,
   getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
   OnChangeFn,
   PaginationState,
   SortingState,
   useReactTable,
 } from "@tanstack/react-table"
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
 import { useMovesHistory } from "@/services/moves/hooks"
 import { useSearchParams, useNavigate as useRouter } from "react-router"
 import z from "zod"
 import { MovesListItem } from "@/services/moves/types"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Pagination } from "@/components/pagination"
+import { DataGridScrollArea } from "@/components/reui/data-grid/data-grid-scroll-area"
+import { Card, CardContent } from "@/components/ui/card"
 
 const COLUMN_INDEX_TO_ID: Record<number, string> = {
   0: "criado",
@@ -181,12 +173,12 @@ export function GenerateVideoHistoryList() {
           accessorKey: "criado",
           id: "criado",
           header: ({ column }) => (
-          <DataGridColumnHeader title="Criado" column={column} />
+          <DataGridColumnHeader className="font-bold" title="Criado" column={column} />
           ),
           cell: ({ row }) => {
               return (
                   <div className="flex items-center">
-                  <h1>{row.original.criado}</h1>
+                  <h1 className="opacity-75">{row.original.criado}</h1>
                   </div>
               )
           },
@@ -199,12 +191,12 @@ export function GenerateVideoHistoryList() {
           accessorKey: "title",
           id: "title",
           header: ({ column }) => (
-          <DataGridColumnHeader title="Title" column={column} />
+          <DataGridColumnHeader className="font-bold" title="Title" column={column} />
           ),
           cell: ({ row }) => {
               return (
                   <div className="flex items-center">
-                  <h1>{row.original.title}</h1>
+                  <h1 className="opacity-75">{row.original.title}</h1>
                   </div>
               )
           },
@@ -217,12 +209,12 @@ export function GenerateVideoHistoryList() {
           accessorKey: "text",
           id: "text",
           header: ({ column }) => (
-          <DataGridColumnHeader title="Text" column={column} />
+          <DataGridColumnHeader className="font-bold" title="Text" column={column} />
           ),
           cell: ({ row }) => {
               return (
                   <div className="flex items-center">
-                  <h1>{row.original.text}</h1>
+                  <h1 className="opacity-75">{row.original.text}</h1>
                   </div>
               )
           },
@@ -235,12 +227,12 @@ export function GenerateVideoHistoryList() {
           accessorKey: "time",
           id: "time",
           header: ({ column }) => (
-          <DataGridColumnHeader title="Time" column={column} />
+          <DataGridColumnHeader className="font-bold" title="Time" column={column} />
           ),
           cell: ({ row }) => {
               return (
                   <div className="flex items-center">
-                  <h1>{row.original.time_request}</h1>
+                  <h1 className="opacity-75">{row.original.time_request}</h1>
                   </div>
               )
           },
@@ -253,7 +245,7 @@ export function GenerateVideoHistoryList() {
           accessorKey: "status",
           id: "status",
           header: ({ column }) => (
-          <DataGridColumnHeader title="Status" column={column} />
+          <DataGridColumnHeader className="font-bold" title="Status" column={column} />
           ),
           cell: ({ row }) => {
           //   const status = row.original.status
@@ -281,6 +273,10 @@ export function GenerateVideoHistoryList() {
     [moves.length],
   );
 
+  const [columnOrder, setColumnOrder] = useState<string[]>(
+    columns.map((column) => column.id as string)
+  )
+
   const table = useReactTable({
     columns,
     data: moves,
@@ -290,9 +286,9 @@ export function GenerateVideoHistoryList() {
     state: {
       pagination,
       sorting: sorting,
-      // columnOrder,
+      columnOrder,
     },
-    // onColumnOrderChange: setColumnOrder,
+    onColumnOrderChange: setColumnOrder,
     // onPaginationChange: setPagination,
     onSortingChange: handleSortingChange,
     // getCoreRowModel: getCoreRowModel(),
@@ -303,32 +299,42 @@ export function GenerateVideoHistoryList() {
 
 
   return (
-    <>
-      <DataGrid
-        table={table}
-        recordCount={moves?.length || 0}
-        isLoading={isLoading}
-        tableLayout={{
-          columnsMovable: true,
-          rowBorder: true,
-          headerBackground: false,
-          headerBorder: true,
-          cellBorder: false,
-          columnsPinnable: false
-        }}
-      >
-        <DataGridTable />
-      </DataGrid>
-      <div className="p-4 sm:p-5 border-t">
-        <Pagination
-          pageIndex={pageIndex}
-          totalCount={totalCount}
-          perPage={perPage}
-          onPageChange={handlePaginate}
-          onPerPageChange={handlePerPageChange}
-          itemsPerPage
-        />
-      </div>
-    </>
+    <Card>
+      <CardContent>
+        <DataGrid
+          table={table}
+          recordCount={moves?.length || 0}
+          isLoading={isLoading}
+          tableLayout={{
+            columnsMovable: true,
+            rowBorder: true,
+            headerBackground: false,
+            headerBorder: true,
+            cellBorder: false,
+            columnsPinnable: false
+          }}
+        >
+          {/* <DataGridTable /> */}
+          <div className="w-full space-y-2.5">
+            <DataGridContainer border={false}>
+              <DataGridScrollArea>
+                <DataGridTable />
+              </DataGridScrollArea>
+            </DataGridContainer>
+          </div>
+        </DataGrid>
+        <div className="p-4 sm:p-5 border-t">
+          <Pagination
+            pageIndex={pageIndex}
+            totalCount={totalCount}
+            perPage={perPage}
+            onPageChange={handlePaginate}
+            onPerPageChange={handlePerPageChange}
+            itemsPerPage
+          />
+        </div>
+
+      </CardContent>
+    </Card>
   )
 }

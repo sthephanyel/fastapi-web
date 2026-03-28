@@ -15,9 +15,11 @@ import {
   ItemSeparator,
   ItemTitle,
 } from "@/components/ui/item"
-import { UserIcon, Mail, Check, X } from 'lucide-react'
+import { UserIcon, Mail, Check, X, MoonIcon, SunIcon } from 'lucide-react'
 import { Badge } from "@/components/reui/badge"
 import { Skeleton } from "@/components/ui/skeleton";
+import { useTheme } from "next-themes";
+import { Switch } from "@/components/ui/switch";
 
 interface UseInformationModalProps {
     readonly open: boolean;
@@ -28,6 +30,11 @@ export function UseInformationModal({
     onOpenChange
 }: UseInformationModalProps){
     const { data, isLoading, isError } = getUser();
+
+    const { theme, setTheme } = useTheme();
+    const handleThemeToggle = (checked: boolean) => {
+        setTheme(checked ? "dark" : "light");
+    };
 
     function EmptyState({ message }: { readonly message: string }) {
         return (
@@ -109,7 +116,28 @@ export function UseInformationModal({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="">
                 <DialogHeader>
-                <DialogTitle>Information User</DialogTitle>
+                    <DialogTitle className="flex justify-between">
+                        Information User
+                        <div className="relative w-14 h-7 mr-5">
+                            <Switch
+                                checked={theme === "dark"}
+                                onCheckedChange={handleThemeToggle}
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                            />
+                            <div className="absolute inset-0 rounded-full bg-secondary"></div>
+                            <div
+                            className={`absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center transform transition-transform ${
+                                theme === "dark" ? "translate-x-7" : "translate-x-0"
+                            }`}
+                            >
+                            {theme === "dark" ? (
+                                <MoonIcon className="w-4 h-4 text-gray-700" />
+                            ) : (
+                                <SunIcon className="w-4 h-4 text-yellow-500" />
+                            )}
+                            </div>
+                        </div>
+                    </DialogTitle>
                 </DialogHeader>
                 {renderContent()}
             </DialogContent>

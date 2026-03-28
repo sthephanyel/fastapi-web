@@ -34,7 +34,20 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    if (isLoggingOut || originalRequest.url?.includes('/logout')) {
+    // if (isLoggingOut || originalRequest.url?.includes('/logout')) {
+    //   return Promise.reject(error);
+    // }
+
+    if (isLoggingOut) {
+      return Promise.reject(error);
+    }
+
+    if (originalRequest.url?.includes('/refresh') && error.response?.status === 401) {
+      isLoggingOut = true;
+
+      useAuthStore.getState().clearAuth();
+      useAuthStore.getState().clearUser();
+
       return Promise.reject(error);
     }
 
@@ -46,17 +59,23 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const newToken = await fetchLoginRefreshAxios(); // ✅ usa sua função
+        const newToken = await fetchLoginRefreshAxios();
+
+        if (!newToken?.access_token) {
+          throw new Error("Refresh inválido");
+        }
 
         originalRequest.headers = {
           ...originalRequest.headers,
           Authorization: `Bearer ${newToken.access_token}`,
         };
 
-        return api(originalRequest); // 🔁 refaz request
+        return api(originalRequest); // refaz request
 
       } catch (err) {
+        isLoggingOut = true;
         useAuthStore.getState().clearAuth();
+        useAuthStore.getState().clearUser();
         return Promise.reject(err);
       }
     }

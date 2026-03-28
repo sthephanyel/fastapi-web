@@ -32,7 +32,7 @@ export async function fetchMoves(
   queryParams.append("orderColumn", String(orderColumn));
   queryParams.append("orderDir", String(orderDir));
 
-  const { data } = await api.get<[MovesListResponse]>(`/video/user/?${queryParams.toString()}`);
+  const { data } = await api.get(`/video/user/?${queryParams.toString()}`);
 
   return { 
     items: data?.items,

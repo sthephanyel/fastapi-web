@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -21,16 +21,14 @@ import { UseInformationModal } from './components/UserInformationModal';
 import { useAuth } from '@/store/auth';
 import { useMediaQuery } from 'usehooks-ts';
 import { GenerateVideoHistoryList } from './components/GenerateVideoHistoryList';
-import { useRefresh } from '@/services/login/hooks';
+import { DashboardVideo } from './components/DashboardVideo';
 
 export default function Home(){
     const { user } = useAuth();
     const [userModalOpen, setUserModalOpen] = useState(false);
     const smallScreen = useMediaQuery("(max-width: 768px)");
     // console.log('smallScreen', smallScreen)
-    // //TODO: COMENTAR ANTES DE COMMITAR
-    // const { data: refresh_response } = useRefresh();
-    // console.log('refresh_response', refresh_response)
+
     return (
         <>
             <UseInformationModal
@@ -58,87 +56,16 @@ export default function Home(){
                             </Card>
                             <TabsList variant="line" className="w-full shrink-0">
                                 <TabsTrigger value="dashboard"><LayoutDashboard/> <span className='max-md:hidden'>Dashboard</span></TabsTrigger>
-                                <TabsTrigger value="generate_video"><Clapperboard/> <span className='max-md:hidden'>Generate Vídeo</span></TabsTrigger>
-                                <TabsTrigger value="add_caption"><Captions/> <span className='max-md:hidden'>Add Caption</span></TabsTrigger>
+                                <TabsTrigger value="generate_video_history"><Clapperboard/> <span className='max-md:hidden'>History Vídeo</span></TabsTrigger>
+                                {/* <TabsTrigger value="add_caption"><Captions/> <span className='max-md:hidden'>Add Caption</span></TabsTrigger> */}
                             </TabsList>
                         </div>
 
                         <TabsContent value="dashboard">
-                            <Card>
-                                <CardHeader className="pb-3">
-                                <CardTitle className="text-base">dashboard</CardTitle>
-                                <CardDescription className="text-sm">
-                                    Update your dashboard information.
-                                </CardDescription>
-                                </CardHeader>
-                                <CardContent className="space-y-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="underline-vertical-name" className="text-sm">
-                                    Name
-                                    </Label>
-                                    <Input
-                                    id="underline-vertical-name"
-                                    defaultValue="Michael Brown"
-                                    className="h-9"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="underline-vertical-email" className="text-sm">
-                                    Email
-                                    </Label>
-                                    <Input
-                                    id="underline-vertical-email"
-                                    type="email"
-                                    defaultValue="michael.brown@example.com"
-                                    className="h-9"
-                                    />
-                                </div>
-                                </CardContent>
-                                <CardFooter className="pt-3">
-                                <Button size="sm">Save changes</Button>
-                                </CardFooter>
-                            </Card>
+                            <DashboardVideo/>
                         </TabsContent>
-                        <TabsContent value="generate_video">
+                        <TabsContent value="generate_video_history">
                             <GenerateVideoHistoryList/>
-                        </TabsContent>
-                        <TabsContent value="add_caption">
-                            <Card>
-                                <CardHeader className="pb-3">
-                                <CardTitle className="text-base">add_caption</CardTitle>
-                                <CardDescription className="text-sm">
-                                    Manage your preferences.
-                                </CardDescription>
-                                </CardHeader>
-                                <CardContent className="space-y-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="underline-vertical-theme" className="text-sm">
-                                    Theme
-                                    </Label>
-                                    <Input
-                                    id="underline-vertical-theme"
-                                    defaultValue="Light"
-                                    className="h-9"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label
-                                    htmlFor="underline-vertical-language"
-                                    className="text-sm"
-                                    >
-                                    Language
-                                    </Label>
-                                    <Input
-                                    id="underline-vertical-language"
-                                    defaultValue="English"
-                                    className="h-9"
-                                    />
-                                </div>
-                                </CardContent>
-                                <CardFooter className="pt-3">
-                                <Button size="sm">Save add_caption</Button>
-                                </CardFooter>
-                            </Card>
                         </TabsContent>
                     </Tabs>
                 </div>
