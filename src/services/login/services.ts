@@ -79,3 +79,22 @@ export async function fetchLoginRefresh(): Promise<{status: Number}>{
     throw error;
   }
 }
+
+export async function fetchLoginRefreshAxios(): Promise<{access_token: String}>{
+  try {
+    const { refreshToken } = useAuthStore.getState();
+    const { data, status } = await api.post<UseRefrash>(`/refresh?refresh_token=${refreshToken}`);
+
+    useAuthStore.getState().setAuth(
+      data.access_token,
+      refreshToken
+    );
+
+    return {
+      'access_token': data.access_token
+    }
+    
+  } catch (error) {
+    throw error;
+  }
+}

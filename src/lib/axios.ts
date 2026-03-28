@@ -1,6 +1,7 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { useAuthStore } from '@/store/auth';
 import { useRefresh } from '@/services/login/hooks';
+import { fetchLoginRefreshAxios } from '@/services/login/services';
 
 let isLoggingOut = false;
 
@@ -42,22 +43,21 @@ api.interceptors.response.use(
     const hasNotRetried = !originalRequest._retry;
 
     if ((isUnauthorized || isForbidden) && hasNotRetried) {
-      const { data: refresh_response } = useRefresh();
-      console.log('useRefresh', refresh_response)
-      if (refresh_response?.status != 200){
-        originalRequest._retry = true;
-        isLoggingOut = true;
-  
-        try {
-          useAuthStore.getState().clearAuth();
-          useAuthStore.getState().clearUser();
-        } finally {
-          setTimeout(() => {
-            isLoggingOut = false;
-          }, 1000);
-        }
-  
-        return Promise.reject(error);
+      originalRequest._retry = true;
+
+      try {
+        const newToken = await fetchLoginRefreshAxios(); // ✅ usa sua função
+
+        originalRequest.headers = {
+          ...originalRequest.headers,
+          Authorization: `Bearer ${newToken.access_token}`,
+        };
+
+        return api(originalRequest); // 🔁 refaz request
+
+      } catch (err) {
+        useAuthStore.getState().clearAuth();
+        return Promise.reject(err);
       }
     }
 

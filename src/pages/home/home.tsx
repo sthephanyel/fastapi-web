@@ -21,12 +21,16 @@ import { UseInformationModal } from './components/UserInformationModal';
 import { useAuth } from '@/store/auth';
 import { useMediaQuery } from 'usehooks-ts';
 import { GenerateVideoHistoryList } from './components/GenerateVideoHistoryList';
+import { useRefresh } from '@/services/login/hooks';
 
 export default function Home(){
     const { user } = useAuth();
     const [userModalOpen, setUserModalOpen] = useState(false);
     const smallScreen = useMediaQuery("(max-width: 768px)");
-    console.log('smallScreen', smallScreen)
+    // console.log('smallScreen', smallScreen)
+    // //TODO: COMENTAR ANTES DE COMMITAR
+    // const { data: refresh_response } = useRefresh();
+    // console.log('refresh_response', refresh_response)
     return (
         <>
             <UseInformationModal
